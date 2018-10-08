@@ -18,7 +18,7 @@ public class mainView extends javax.swing.JFrame {
         initComponents();
         
         //hides dependencies options if linked list is empty
-        if(list.isEmpty() == true){
+        /*if(list.isEmpty() == true){
             //remove nodeDependenciesTxt and nodeDependencieslbl
             nodeDependenciesTxt.setVisible(false);
             nodeDependencieslbl.setVisible(false);
@@ -26,10 +26,11 @@ public class mainView extends javax.swing.JFrame {
         }else{
             nodeDependenciesTxt.setVisible(true);
             nodeDependencieslbl.setVisible(true);
-        }
+        }*/
         
         durationErrorLbl.setVisible(false); //hides error label on start up
         errorLbl.setVisible(false); //hides error label on start up
+        requiredLbl.setVisible(false);
     }
 
     /**
@@ -56,6 +57,8 @@ public class mainView extends javax.swing.JFrame {
         listPathsBtn = new javax.swing.JButton();
         helpBtn = new javax.swing.JButton();
         aboutBtn = new javax.swing.JButton();
+        Reset = new javax.swing.JButton();
+        requiredLbl = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setCursor(new java.awt.Cursor(java.awt.Cursor.CROSSHAIR_CURSOR));
@@ -89,13 +92,19 @@ public class mainView extends javax.swing.JFrame {
         sortDurationBtn.setBackground(new java.awt.Color(0, 0, 0));
         sortDurationBtn.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
         sortDurationBtn.setForeground(new java.awt.Color(255, 255, 255));
-        sortDurationBtn.setText("Sort By Duration");
+        sortDurationBtn.setText("List Individual Nodes");
         sortDurationBtn.setToolTipText("This will sort your individual nodes by their duration");
+        sortDurationBtn.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                sortDurationBtnActionPerformed(evt);
+            }
+        });
 
         durationErrorLbl.setForeground(new java.awt.Color(255, 0, 0));
         durationErrorLbl.setText("Not a number!");
 
         errorLbl.setForeground(new java.awt.Color(255, 0, 0));
+        errorLbl.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         errorLbl.setText("Error: Could not Add Node");
 
         listPathsBtn.setBackground(new java.awt.Color(0, 0, 0));
@@ -108,6 +117,8 @@ public class mainView extends javax.swing.JFrame {
             }
         });
 
+        helpBtn.setBackground(new java.awt.Color(102, 0, 0));
+        helpBtn.setForeground(new java.awt.Color(255, 255, 255));
         helpBtn.setText("Help");
         helpBtn.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -115,12 +126,27 @@ public class mainView extends javax.swing.JFrame {
             }
         });
 
+        aboutBtn.setBackground(new java.awt.Color(102, 0, 0));
+        aboutBtn.setForeground(new java.awt.Color(255, 255, 255));
         aboutBtn.setText("About");
         aboutBtn.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 aboutBtnActionPerformed(evt);
             }
         });
+
+        Reset.setBackground(new java.awt.Color(102, 0, 0));
+        Reset.setForeground(new java.awt.Color(255, 255, 255));
+        Reset.setText("Reset");
+        Reset.setToolTipText("Delete all activities");
+        Reset.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                ResetActionPerformed(evt);
+            }
+        });
+
+        requiredLbl.setForeground(new java.awt.Color(255, 0, 51));
+        requiredLbl.setText("*Required");
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -136,39 +162,45 @@ public class mainView extends javax.swing.JFrame {
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                             .addComponent(nodeNamelbl)
                             .addComponent(nodeDurationlbl)
-                            .addComponent(nodeDependencieslbl))
+                            .addComponent(nodeDependencieslbl)
+                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                .addComponent(helpBtn)
+                                .addComponent(aboutBtn)))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(nodeNameTxt, javax.swing.GroupLayout.DEFAULT_SIZE, 128, Short.MAX_VALUE)
+                            .addComponent(nodeDurationTxt)
+                            .addComponent(nodeDependenciesTxt))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(errorLbl)
-                            .addGroup(layout.createSequentialGroup()
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                    .addComponent(nodeNameTxt, javax.swing.GroupLayout.DEFAULT_SIZE, 128, Short.MAX_VALUE)
-                                    .addComponent(nodeDurationTxt)
-                                    .addComponent(nodeDependenciesTxt))
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addComponent(durationErrorLbl))))
+                            .addComponent(durationErrorLbl)
+                            .addComponent(requiredLbl)))
                     .addGroup(layout.createSequentialGroup()
                         .addContainerGap()
-                        .addComponent(helpBtn))
-                    .addGroup(layout.createSequentialGroup()
-                        .addContainerGap()
-                        .addComponent(aboutBtn)))
+                        .addComponent(errorLbl, javax.swing.GroupLayout.PREFERRED_SIZE, 274, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 46, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(listPathsBtn, javax.swing.GroupLayout.DEFAULT_SIZE, 193, Short.MAX_VALUE)
                     .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 193, Short.MAX_VALUE)
-                    .addComponent(sortDurationBtn, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(sortDurationBtn, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(Reset, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addGap(26, 26, 26))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addGroup(layout.createSequentialGroup()
+                        .addGap(12, 12, 12)
+                        .addComponent(sortDurationBtn)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 201, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
                         .addGap(11, 11, 11)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(nodeNamelbl)
-                            .addComponent(nodeNameTxt, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(nodeNameTxt, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(requiredLbl))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(nodeDurationlbl)
@@ -182,19 +214,15 @@ public class mainView extends javax.swing.JFrame {
                         .addComponent(addNodeBtn)
                         .addGap(18, 18, 18)
                         .addComponent(errorLbl)
-                        .addGap(14, 14, 14)
+                        .addGap(19, 19, 19)
                         .addComponent(helpBtn)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(aboutBtn)
-                        .addGap(0, 0, Short.MAX_VALUE))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(12, 12, 12)
-                        .addComponent(sortDurationBtn)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 219, Short.MAX_VALUE)))
+                        .addComponent(aboutBtn)))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(listPathsBtn)
-                .addContainerGap())
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(Reset)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         pack();
@@ -205,10 +233,16 @@ public class mainView extends javax.swing.JFrame {
         boolean isNum = false;
         Node newNode = new Node();
         errorLbl.setVisible(false);
-        
+        Boolean nameEmpty = false;
         //sets name of node
         String nodeNameStr = nodeNameTxt.getText();
-        newNode.setName(nodeNameStr);
+        if(nodeNameStr.equals("")){
+            nameEmpty = true;
+            requiredLbl.setVisible(true);
+        }else{
+           newNode.setName(nodeNameStr); 
+           requiredLbl.setVisible(false);
+        }
         
         //try-catch to check if input is an int
         try{
@@ -224,7 +258,7 @@ public class mainView extends javax.swing.JFrame {
            isNum = false;
         }
         
-        if(isNum == true){
+        if(isNum == true && nameEmpty == false){
             //convert CSV to array
             String nodeDependiciesStr = nodeDependenciesTxt.getText();
             String[] nodeDependiciesArr = nodeDependiciesStr.split("\\s*,\\s*"); 
@@ -240,8 +274,8 @@ public class mainView extends javax.swing.JFrame {
             displayNodesField.setText(list.printString()); 
         
             //shows dependencies options after first node is added
-            nodeDependenciesTxt.setVisible(true);
-            nodeDependencieslbl.setVisible(true);
+            //nodeDependenciesTxt.setVisible(true);
+            //nodeDependencieslbl.setVisible(true);
         
             //resets textFields
             nodeNameTxt.setText("");
@@ -249,6 +283,7 @@ public class mainView extends javax.swing.JFrame {
             nodeDependenciesTxt.setText("");
         }//end if isNum == true
         else{ //error, could not add node
+            errorLbl.setText("Error: Could not Add Node");
             errorLbl.setVisible(true);
         }
     }//GEN-LAST:event_addNodeBtnActionPerformed
@@ -257,12 +292,13 @@ public class mainView extends javax.swing.JFrame {
         //--------- Error Checking ----------------
         Node[] end2 = list.findLastNodes();
         Node[] end1 = list.findLastNodes();
+        Node[] start1 = list.findFirstNodes();
         if(list.isEmpty() == true){
             errorLbl.setVisible(true);
             errorLbl.setText("There are no nodes in the list");
             displayNodesField.setText(""); 
             list.resetList();
-        }else if(list.findFirstNodes() == null){
+        }else if(start1[0] == null){
             errorLbl.setVisible(true);
             errorLbl.setText("There are no starting nodes");
             displayNodesField.setText(""); 
@@ -283,10 +319,13 @@ public class mainView extends javax.swing.JFrame {
             errorLbl.setVisible(false);
             
             pathObject[] pathObj = new pathObject[list.numberOfPaths()];
-        
+        //------------- populating path object array ---------------
             for(int i = 0; i<list.numberOfPaths(); i++){
-                pathObj[i] = list.printPath();
+                pathObj[i] = list.getPath();
             }
+            
+            pathObj = list.removeDuplicates(pathObj);
+            
             //sort by duration
             pathObj = list.sortPaths(pathObj);
         
@@ -297,6 +336,8 @@ public class mainView extends javax.swing.JFrame {
             }
         
             displayNodesField.setText(paths);
+            
+            list.resetDependicies();
             }
     }//GEN-LAST:event_listPathsBtnActionPerformed
 
@@ -318,6 +359,34 @@ public class mainView extends javax.swing.JFrame {
                 + "message and try to re-add the node. For all other questions please"
                 + "refer to the user manual.");
     }//GEN-LAST:event_helpBtnActionPerformed
+
+    private void ResetActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ResetActionPerformed
+        // TODO add your handling code here:
+        errorLbl.setVisible(true);
+        errorLbl.setText("Program Reset - All Activities Removed");
+        displayNodesField.setText(""); 
+        list.resetList();
+        durationErrorLbl.setVisible(false);
+        requiredLbl.setVisible(false);
+        
+        //resets textFields
+            nodeNameTxt.setText("");
+            nodeDurationTxt.setText("");
+            nodeDependenciesTxt.setText("");
+    }//GEN-LAST:event_ResetActionPerformed
+
+    private void sortDurationBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_sortDurationBtnActionPerformed
+
+        //displays the contents of the linked list
+        if(list.isEmpty()== false){
+            displayNodesField.setText(list.printString()); 
+            errorLbl.setVisible(false);
+        }else{
+            errorLbl.setVisible(true);
+            errorLbl.setText("There are no nodes in list");
+        }
+        
+    }//GEN-LAST:event_sortDurationBtnActionPerformed
 
     /**
      * @param args the command line arguments
@@ -355,6 +424,7 @@ public class mainView extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton Reset;
     private javax.swing.JButton aboutBtn;
     private javax.swing.JButton addNodeBtn;
     private javax.swing.JTextArea displayNodesField;
@@ -369,6 +439,7 @@ public class mainView extends javax.swing.JFrame {
     private javax.swing.JLabel nodeDurationlbl;
     private javax.swing.JTextField nodeNameTxt;
     private javax.swing.JLabel nodeNamelbl;
+    private javax.swing.JLabel requiredLbl;
     private javax.swing.JButton sortDurationBtn;
     // End of variables declaration//GEN-END:variables
 }

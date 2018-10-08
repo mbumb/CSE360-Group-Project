@@ -22,6 +22,6 @@ public class pathObject {
     
     public String toString(){
         return "\n" + 
-               "Path: " + getPath() + " : " + getDuration() + "\n";
+               getPath() + " : " + getDuration() + "\n";
     }
 }
