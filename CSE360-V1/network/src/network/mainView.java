@@ -344,10 +344,19 @@ public class mainView extends javax.swing.JFrame {
     private void aboutBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_aboutBtnActionPerformed
         // TODO add your handling code here:
         displayNodesField.setLineWrap(true);
-        displayNodesField.setText("This program takes in node information and "
-                + "displays the nodes to the screen. After adding the desired nodes"
-                + "the program allows you to print out node paths and sort the paths"
-                + "by their duration. Click the help button for additional help and information");
+        displayNodesField.setText("This program written and\n"
+                + "designed by the following\n"
+                + "students for CSE360, for the\n"
+                + "Fall of 2018:\n"
+                + "Meg Woodford\n"
+                + "Matthew Bumb\n"
+                + "Xinyi\n"
+                + "and Melissa\n"
+                + "\n"
+                + "To allow users to create a\n"
+                + "network diagram, and find all\n"
+                + "paths through its nodes,\n"
+                + "sorted by duration.");
     }//GEN-LAST:event_aboutBtnActionPerformed
 
     private void helpBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_helpBtnActionPerformed
