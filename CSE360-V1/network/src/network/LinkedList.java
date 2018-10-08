@@ -51,7 +51,7 @@ public class LinkedList{
     }
     
     //------------------ Number of paths ---------------------------------------
-    //the number of paths in a network is equal to the number of dependicies
+    //the max number of paths in a network is equal to the number of dependicies
     //multiplied together
     public int numberOfPaths(){
         int count = 1;
@@ -99,7 +99,8 @@ public class LinkedList{
     }
     
     //------------------- Print Nework Paths -----------------------------------
-    public pathObject printPath(){
+    public pathObject getPath(){
+        List<String> pathStr = new ArrayList<String>();
         Node[] end = findLastNodes();
         Node check = new Node();
         
@@ -108,12 +109,12 @@ public class LinkedList{
         Node current = end[0];
             
         while(current.dependiciesEmpty() == false){
-            //get node dependency 0
+            //get node dependency
             if(current.dependicies[0].equals("}")){
                 String[] reset = current.dependiciesCpy;
                 current.setDependicies(reset);
             }
-            
+
             listNode iterate = head;
             while(iterate != null){
                 check = iterate.data;
@@ -123,71 +124,34 @@ public class LinkedList{
                 }
                 iterate = iterate.next;
             }//end while
-            paths += " " + current.getName();
+            pathStr.add(0, current.getName());
             duration += current.getDuration();
-            //current equals node dependecy 0
             current = check;   
         }//end while
         duration += current.getDuration();
-        paths += " " + current.getName();
-        //reverse the paths
-        StringBuilder sb = new StringBuilder(paths);
-        String pathReversed = sb.reverse().toString();
+        pathStr.add(0, current.getName());
+        
+        paths = pathStr.toString();
+        System.out.println(paths);
         
         pathObject pathObj = new pathObject();
-        pathObj.setPath(pathReversed);
+        pathObj.setPath(paths);
         pathObj.setDuration(duration);
         return pathObj;
     }
     
-    /*
-        //--------------------------------------------------------------------------
-    public void printPath(){
-        Node[] end = findLastNodes();
-        Node check = new Node();
+    //---------------------- Remove Path Duplicates ----------------------------
+    public pathObject[] removeDuplicates(pathObject[] pathObj){
         
-        for(int i = 0; i<numberOfPaths(); i++){
-            String paths = "";
-            int duration = 0;
-            Node current = end[0];
-            
-        while(current.dependiciesEmpty() == false){
-            //get node dependency 0
-            if(current.dependicies[0].equals("}")){
-                String[] reset = current.dependiciesCpy;
-                current.setDependicies(reset);
-            }
-            
-            listNode iterate = head;
-            while(iterate != null){
-                check = iterate.data;
-                if(!current.dependicies[0].equals("}") && current.dependicies[0].equals(check.getName())){
-                    current.swapDependicies();
-                    break;
-                }
-                iterate = iterate.next;
-            }//end while
-            paths += " " + current.getName();
-            duration += current.getDuration();
-            //current equals node dependecy 0
-            current = check;   
-        }//end while
-        duration += current.getDuration();
-        paths += " " + current.getName();
-        //reverse the paths
-        StringBuilder sb = new StringBuilder(paths);
+        Set<String> set = new HashSet<String>();
+        List<pathObject> pathList = new ArrayList<pathObject>();
+        for(pathObject path: pathObj) if(set.add(path.getPath())) pathList.add(path);
+        pathObject[] uniquePaths = pathList.toArray(new pathObject[pathList.size()]);
         
-        System.out.println(sb.reverse().toString() + " :: " + duration);
-        }//end for
-        
-        //reset list node dependicies
-        resetDependicies();
-        
+        return uniquePaths;
     }
     
-    */
-    
-    //--------------------------------------------------------------------------
+    //--------------------- Reset Node Dependicies -----------------------------
     public void resetDependicies(){
         listNode node = head;
         Node current = new Node();
@@ -267,7 +231,6 @@ public class LinkedList{
                }else{
                    isEnd = true;
                }
-               //System.out.println("Dependiciy: " + tempLst.get(i) + " Name: " + current.getName() + " isEnd? " + isEnd);
             }
             if(isEnd == true){
                 //if there were no matches, add node to end nodes array
