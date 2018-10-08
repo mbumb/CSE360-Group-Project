@@ -99,6 +99,7 @@ public class LinkedList{
     }
     
     //------------------- Print Nework Paths -----------------------------------
+	//uses for loop in main to print all paths
     public pathObject getPath(){
         List<String> pathStr = new ArrayList<String>();
         Node[] end = findLastNodes();
