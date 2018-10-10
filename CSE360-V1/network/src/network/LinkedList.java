@@ -1,5 +1,6 @@
 package network;
 import java.util.*;
+import java.lang.Math; 
 
 public class LinkedList{
     private class listNode{
@@ -60,7 +61,7 @@ public class LinkedList{
         
         while(node != null){
            mul = node.data;
-           count = count * (mul.dependiciesCpy.length-1);
+           count = count * (mul.dependiciesCpy2.length);
            node = node.next;
         }
         return count;
@@ -100,7 +101,7 @@ public class LinkedList{
     
     //------------------- Print Nework Paths -----------------------------------
 	//uses for loop in main to print all paths
-    public pathObject getPath(){
+    public pathObject getPathObj(){
         List<String> pathStr = new ArrayList<String>();
         Node[] end = findLastNodes();
         Node check = new Node();
@@ -109,13 +110,12 @@ public class LinkedList{
         String paths = "";
         int duration = 0;
         Node current = end[0];
-            
+        
         while(current.dependiciesEmpty() == false){
             //get node dependency
             error = true;
             if(current.dependicies[0].equals("}")){
-                String[] reset = current.dependiciesCpy;
-                current.setDependicies(reset);
+                current.swapDependicies();
             }
 
             listNode iterate = head;
@@ -173,13 +173,15 @@ public class LinkedList{
     
     //---------------------- Remove Path Duplicates ----------------------------
     public pathObject[] removeDuplicates(pathObject[] pathObj){
-        
-        Set<String> set = new HashSet<String>();
         List<pathObject> pathList = new ArrayList<pathObject>();
-        for(pathObject path: pathObj) if(set.add(path.getPath())) pathList.add(path);
-        pathObject[] uniquePaths = pathList.toArray(new pathObject[pathList.size()]);
+        Set<String> pathSet = new HashSet<String>();
+        for(pathObject path : pathObj){
+            if(pathSet.add(path.getPath())){
+                pathList.add(path);
+            }
+        }
         
-        return uniquePaths;
+        return pathList.toArray(new pathObject[pathList.size()]);
     }
     
     //--------------------- Reset Node Dependicies -----------------------------

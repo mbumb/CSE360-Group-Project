@@ -4,7 +4,6 @@ public class Node{
     private String name;
     private int duration;
     public String[] dependicies;
-    public String[] dependiciesCpy;
     public String[] dependiciesCpy2;
     
     public void setName(String nodeName){
@@ -22,15 +21,6 @@ public class Node{
             dependicies[i] = nodeDependicies[i];
         }
         dependicies[i] = "}";
-    }
-    
-    public void setDependiciesCpy(String[] nodeDependicies){
-        dependiciesCpy = new String[nodeDependicies.length+1];
-        int i;
-        for(i = 0; i < nodeDependicies.length; i++){
-            dependiciesCpy[i] = nodeDependicies[i];
-        }
-        dependiciesCpy[i] = "}";
     }
     
     public void setDependiciesCpy2(String[] nodeDependicies){
@@ -54,14 +44,6 @@ public class Node{
         String dependiciesStr = "";
         for(int i = 0; i < dependicies.length; i++){
             dependiciesStr = dependiciesStr + " " + dependicies[i];
-        }
-        return dependiciesStr;
-    }
-    
-    public String getDependiciesCpy(){
-        String dependiciesStr = "";
-        for(int i = 0; i < dependiciesCpy.length; i++){
-            dependiciesStr = dependiciesStr + " " + dependiciesCpy[i];
         }
         return dependiciesStr;
     }
