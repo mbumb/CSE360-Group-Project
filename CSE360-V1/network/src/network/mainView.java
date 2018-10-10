@@ -317,35 +317,51 @@ public class mainView extends javax.swing.JFrame {
         //---------- Error checking passed ------------------
         }else{
             errorLbl.setVisible(false);
+            boolean error = false;
             
             pathObject[] pathObj = new pathObject[list.numberOfPaths()];
         //------------- populating path object array ---------------
             for(int i = 0; i<list.numberOfPaths(); i++){
-                pathObj[i] = list.getPath();
+                //---- if there is an unconnected node -----
+                if(list.getPath() == null){
+                    errorLbl.setVisible(true);
+                    errorLbl.setText("There are unconnected nodes");
+                    displayNodesField.setText(""); 
+                    list.resetList();
+                    error = true;
+                    break;
+                //---- if all nodes are connected ------
+                }else{
+                     pathObj[i] = list.getPath();
                 
+                //------ if there is a cycle ------
                 if(list.cycleCheck(pathObj[i]) == true) {
                     errorLbl.setVisible(true);
                     errorLbl.setText("There is a cycle");
                     displayNodesField.setText(""); 
+                    error = true;
                     list.resetList();
                     break;
                 }
+                }
             }
             
-            pathObj = list.removeDuplicates(pathObj);
+            if(error == false){
+                pathObj = list.removeDuplicates(pathObj);
             
-            //sort by duration
-            pathObj = list.sortPaths(pathObj);
+                //sort by duration
+                pathObj = list.sortPaths(pathObj);
         
-            String paths = "";
+                String paths = "";
         
-            for(int j = 0; j < pathObj.length; j++){
-                paths += pathObj[j];
-            }
+                for(int j = 0; j < pathObj.length; j++){
+                    paths += pathObj[j];
+                }
         
-            displayNodesField.setText(paths);
+                displayNodesField.setText(paths);
             
-            list.resetDependicies();
+                list.resetDependicies();
+                }
             }
     }//GEN-LAST:event_listPathsBtnActionPerformed
 
