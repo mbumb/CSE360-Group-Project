@@ -104,6 +104,7 @@ public class LinkedList{
         List<String> pathStr = new ArrayList<String>();
         Node[] end = findLastNodes();
         Node check = new Node();
+        boolean error; //if 0 there is an error
         
         String paths = "";
         int duration = 0;
@@ -111,6 +112,7 @@ public class LinkedList{
             
         while(current.dependiciesEmpty() == false){
             //get node dependency
+            error = true;
             if(current.dependicies[0].equals("}")){
                 String[] reset = current.dependiciesCpy;
                 current.setDependicies(reset);
@@ -120,11 +122,18 @@ public class LinkedList{
             while(iterate != null){
                 check = iterate.data;
                 if(current.dependicies[0].equals(check.getName())){
+                    System.out.println(current.dependicies[0] + " == " + check.getName());
                     current.swapDependicies();
+                    error = false; //if current is found
                     break;
                 }
                 iterate = iterate.next;
             }//end while
+            System.out.println("Error Code After: " + error);
+            if(error == true){
+                System.out.print("Unconnected node encountered");
+                return null;
+            }
             pathStr.add(0, current.getName());
             duration += current.getDuration();
             current = check;   
