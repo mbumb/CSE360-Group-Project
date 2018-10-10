@@ -122,14 +122,12 @@ public class LinkedList{
             while(iterate != null){
                 check = iterate.data;
                 if(current.dependicies[0].equals(check.getName())){
-                    System.out.println(current.dependicies[0] + " == " + check.getName());
                     current.swapDependicies();
                     error = false; //if current is found
                     break;
                 }
                 iterate = iterate.next;
             }//end while
-            System.out.println("Error Code After: " + error);
             if(error == true){
                 System.out.print("Unconnected node encountered");
                 return null;
