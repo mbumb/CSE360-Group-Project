@@ -138,7 +138,30 @@ public class LinkedList{
         pathObject pathObj = new pathObject();
         pathObj.setPath(paths);
         pathObj.setDuration(duration);
+        
+        if (cycleCheck(pathObj) == true) {
+            System.out.println("cycle");
+        }
+        
         return pathObj;
+    }
+    
+    //---------------------- Check for cycles in network ----------------------
+    public boolean cycleCheck(pathObject pathObj) {
+        boolean cycle = false;
+        String obj1 = pathObj.getPath();
+        
+        String[] objArr = obj1.split(",");
+        //List<String> obj = Arrays.asList(objArr);
+        
+        for (int i = 0; i < objArr.length; i++) {
+            for (int j = i + 1; j < objArr.length; j++) {
+                if(j != i && (objArr[i]).equals(objArr[j])) {
+                    cycle = true;
+                }
+            }
+        }
+        return cycle;
     }
     
     //---------------------- Remove Path Duplicates ----------------------------

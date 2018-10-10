@@ -322,6 +322,14 @@ public class mainView extends javax.swing.JFrame {
         //------------- populating path object array ---------------
             for(int i = 0; i<list.numberOfPaths(); i++){
                 pathObj[i] = list.getPath();
+                
+                if(list.cycleCheck(pathObj[i]) == true) {
+                    errorLbl.setVisible(true);
+                    errorLbl.setText("There is a cycle");
+                    displayNodesField.setText(""); 
+                    list.resetList();
+                    break;
+                }
             }
             
             pathObj = list.removeDuplicates(pathObj);
