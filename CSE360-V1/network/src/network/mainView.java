@@ -418,11 +418,22 @@ public class mainView extends javax.swing.JFrame {
 
         infoTxt.setVisible(true);
         infoTxt.setLineWrap(true);
-        infoTxt.setText("If you are having trouble adding a node be sure"
-                + "to make sure all text fields are filled in. If you are experiencing "
-                + "a red error message follow the directions given by the red error "
-                + "message and try to re-add the node. For all other questions please"
-                + "refer to the user manual.");
+        infoTxt.setText("Nodes should be formatted in the following manner:\n"
+                + "    Name: string of characters and/or numbers\n"
+                + "    Duration: a positive integer between 0 and 2,147,483,647\n"
+                + "    Dependencies: Strings (case-sensitive), matching your node names,\n"
+                + "    and separated by commas.\n"
+                + "\n"
+                + "-Press 'Add +' to add the node to the list.\n"
+                + "-Press the 'List Individual Nodes' button to see all nodes added so far.\n"
+                + "-Press the 'List Paths' button to see all paths through the network\n"
+                + "diagram.\n"
+                + "-Press 'Reset' to clear the list of all nodes.\n"
+                + "\n"
+                + "If you are having trouble adding a node, be sure\n"
+                + "to make sure all text fields are filled in. If you are experiencing\n"
+                + "a red error message, follow the directions and try to re-add the node.\n"
+                + "For all other questions, please refer to the user manual. \n");
     }//GEN-LAST:event_helpBtnActionPerformed
 
     private void ResetActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ResetActionPerformed
