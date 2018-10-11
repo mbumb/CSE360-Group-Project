@@ -415,7 +415,7 @@ public class mainView extends javax.swing.JFrame {
     }//GEN-LAST:event_aboutBtnActionPerformed
 
     private void helpBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_helpBtnActionPerformed
-        // TODO add your handling code here:
+
         infoTxt.setVisible(true);
         infoTxt.setLineWrap(true);
         infoTxt.setText("If you are having trouble adding a node be sure"
