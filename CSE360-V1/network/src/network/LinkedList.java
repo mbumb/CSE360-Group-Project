@@ -1,6 +1,5 @@
 package network;
 import java.util.*;
-import java.lang.Math; 
 
 public class LinkedList{
     private class listNode{
@@ -61,7 +60,7 @@ public class LinkedList{
         
         while(node != null){
            mul = node.data;
-           count = count * (mul.dependiciesCpy2.length);
+           count = count * (mul.dependiciesCpy.length-1);
            node = node.next;
         }
         return count;
@@ -100,22 +99,20 @@ public class LinkedList{
     }
     
     //------------------- Print Nework Paths -----------------------------------
-	//uses for loop in main to print all paths
-    public pathObject getPathObj(){
+    public pathObject getPath(){
         List<String> pathStr = new ArrayList<String>();
         Node[] end = findLastNodes();
         Node check = new Node();
-        boolean error; //if 0 there is an error
         
         String paths = "";
         int duration = 0;
         Node current = end[0];
-        
+            
         while(current.dependiciesEmpty() == false){
             //get node dependency
-            error = true;
             if(current.dependicies[0].equals("}")){
-                current.swapDependicies();
+                String[] reset = current.dependiciesCpy;
+                current.setDependicies(reset);
             }
 
             listNode iterate = head;
@@ -123,15 +120,10 @@ public class LinkedList{
                 check = iterate.data;
                 if(current.dependicies[0].equals(check.getName())){
                     current.swapDependicies();
-                    error = false; //if current is found
                     break;
                 }
                 iterate = iterate.next;
             }//end while
-            if(error == true){
-                System.out.print("Unconnected node encountered");
-                return null;
-            }
             pathStr.add(0, current.getName());
             duration += current.getDuration();
             current = check;   
@@ -145,43 +137,18 @@ public class LinkedList{
         pathObject pathObj = new pathObject();
         pathObj.setPath(paths);
         pathObj.setDuration(duration);
-        
-        if (cycleCheck(pathObj) == true) {
-            System.out.println("cycle");
-        }
-        
         return pathObj;
-    }
-    
-    //---------------------- Check for cycles in network ----------------------
-    public boolean cycleCheck(pathObject pathObj) {
-        boolean cycle = false;
-        String obj1 = pathObj.getPath();
-        
-        String[] objArr = obj1.split(",");
-        //List<String> obj = Arrays.asList(objArr);
-        
-        for (int i = 0; i < objArr.length; i++) {
-            for (int j = i + 1; j < objArr.length; j++) {
-                if(j != i && (objArr[i]).equals(objArr[j])) {
-                    cycle = true;
-                }
-            }
-        }
-        return cycle;
     }
     
     //---------------------- Remove Path Duplicates ----------------------------
     public pathObject[] removeDuplicates(pathObject[] pathObj){
-        List<pathObject> pathList = new ArrayList<pathObject>();
-        Set<String> pathSet = new HashSet<String>();
-        for(pathObject path : pathObj){
-            if(pathSet.add(path.getPath())){
-                pathList.add(path);
-            }
-        }
         
-        return pathList.toArray(new pathObject[pathList.size()]);
+        Set<String> set = new HashSet<String>();
+        List<pathObject> pathList = new ArrayList<pathObject>();
+        for(pathObject path: pathObj) if(set.add(path.getPath())) pathList.add(path);
+        pathObject[] uniquePaths = pathList.toArray(new pathObject[pathList.size()]);
+        
+        return uniquePaths;
     }
     
     //--------------------- Reset Node Dependicies -----------------------------
@@ -276,6 +243,55 @@ public class LinkedList{
         //return array of end nodes
         return endNodes;
     }//end findLastNodes
+    
+    //---------------- Change path duration ------------------------------------
+    public boolean changeDuration(String name, int newDuration){
+        listNode node = head;
+        Node find = new Node();
+        
+        while(node != null){
+            find = node.data;
+            if(find.getName().equals(name)){
+                find.setDuration(newDuration); //change node duration
+                return true;
+            }else{
+                node = node.next; //else move to next position
+            }
+        }//end while
+        //if we reach the end of the loop without changing the duration
+        return false;
+        
+        /*
+        // ---------- To be added into mainView under change duration btn ----------
+        if(list.isEmpty() == true){
+            errorLbl.setVisible(true);
+            errorLbl.setText("There are no nodes in the list");
+        }else{
+            String name = "A"; //varName.getText();
+        
+        //try-catch to check if input is an int
+            try{
+                //input is an integer - convert to int
+                int newDuration = Integer.parseInt(CHANGEVARNAME.getText());
+                //changes node duration
+                CHANGEVARNAME.setVisible(false); //error label to check if int
+                boolean tf = list.changeDuration(name,newDuration);
+                //----- Check if node duration was changed -------
+                if(tf == true){
+                    errorLbl.setVisible(false);
+                    displayNodesField.setText(list.printString()); //show updated node
+                }else{
+                    errorLbl.setVisible(true);
+                    errorLbl.setText("That node isn't in the list!");
+                }//end else
+            //----- Input is not integer ------
+            }catch(NumberFormatException e){
+                //input is not an integer
+                CHANGEVARNAME.setVisible(true); //error label to check if int
+            }
+        }//end else
+        */
+    }
     
     //-------------- Prints out the linkedlist contents ------------------------
     public String printString() {
