@@ -88,7 +88,7 @@ public class LinkedList{
             for(int j = 0; j < pathObjArr.length; j++){
                 obj1 = pathObjArr[j];
                 obj2 = pathObjArr[i];
-                if(obj1.getDuration() > obj2.getDuration()){
+                if(obj1.getDuration() < obj2.getDuration()){
                     //swap j and i indexes
                     temp = pathObjArr[j];
                     pathObjArr[j] = pathObjArr[i];
@@ -184,6 +184,31 @@ public class LinkedList{
         return pathList.toArray(new pathObject[pathList.size()]);
     }
     
+    //-------------------- Sort nodes in ABC order -----------------------------
+    public void sortNodesABC(){
+        listNode node = head;
+        Node current = new Node();
+        Node nextNode = new Node();
+        Node temp = new Node();
+        while(node != null){
+            current = node.data;
+            listNode iterate = head;
+            while(iterate != null){
+                nextNode = iterate.data;
+                //swap
+                if(current.getName().compareTo(nextNode.getName()) < 0){
+                    temp = current;
+                    current = nextNode;
+                    nextNode = temp;
+                    node.data = current;
+                    iterate.data = nextNode;
+                }//end if
+                iterate = iterate.next;
+            }//end while
+            node = node.next;
+        }//end while
+    }
+    
     //--------------------- Reset Node Dependicies -----------------------------
     public void resetDependicies(){
         listNode node = head;
@@ -276,6 +301,55 @@ public class LinkedList{
         //return array of end nodes
         return endNodes;
     }//end findLastNodes
+    
+    //---------------- Change path duration ------------------------------------
+    public boolean changeDuration(String name, int newDuration){
+        listNode node = head;
+        Node find = new Node();
+        
+        while(node != null){
+            find = node.data;
+            if(find.getName().equals(name)){
+                find.setDuration(newDuration); //change node duration
+                return true;
+            }else{
+                node = node.next; //else move to next position
+            }
+        }//end while
+        //if we reach the end of the loop without changing the duration
+        return false;
+        
+        /*
+        // ---------- To be added into mainView under change duration btn ----------
+        if(list.isEmpty() == true){
+            errorLbl.setVisible(true);
+            errorLbl.setText("There are no nodes in the list");
+        }else{
+            String name = "A"; //varName.getText();
+        
+        //try-catch to check if input is an int
+            try{
+                //input is an integer - convert to int
+                int newDuration = Integer.parseInt(CHANGEVARNAME.getText());
+                //changes node duration
+                CHANGEVARNAME.setVisible(false); //error label to check if int
+                boolean tf = list.changeDuration(name,newDuration);
+                //----- Check if node duration was changed -------
+                if(tf == true){
+                    errorLbl.setVisible(false);
+                    displayNodesField.setText(list.printString()); //show updated node
+                }else{
+                    errorLbl.setVisible(true);
+                    errorLbl.setText("That node isn't in the list!");
+                }//end else
+            //----- Input is not integer ------
+            }catch(NumberFormatException e){
+                //input is not an integer
+                CHANGEVARNAME.setVisible(true); //error label to check if int
+            }
+        }//end else
+        */
+    }
     
     //-------------- Prints out the linkedlist contents ------------------------
     public String printString() {

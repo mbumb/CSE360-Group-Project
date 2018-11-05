@@ -4,6 +4,10 @@
  * and open the template in the editor.
  */
 package network;
+import java.io.BufferedWriter;
+import java.io.FileWriter;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.*;
 /**
  *
@@ -32,6 +36,8 @@ public class mainView extends javax.swing.JFrame {
         errorLbl.setVisible(false); //hides error label on start up
         requiredLbl.setVisible(false);
         infoTxt.setVisible(false);
+        repoRequired.setVisible(false);
+        
     }
 
     /**
@@ -52,7 +58,7 @@ public class mainView extends javax.swing.JFrame {
         jScrollPane1 = new javax.swing.JScrollPane();
         displayNodesField = new javax.swing.JTextArea();
         nodeDependenciesTxt = new javax.swing.JTextField();
-        sortDurationBtn = new javax.swing.JButton();
+        listIndividualNodes = new javax.swing.JButton();
         durationErrorLbl = new javax.swing.JLabel();
         errorLbl = new javax.swing.JLabel();
         listPathsBtn = new javax.swing.JButton();
@@ -62,6 +68,12 @@ public class mainView extends javax.swing.JFrame {
         requiredLbl = new javax.swing.JLabel();
         jScrollPane2 = new javax.swing.JScrollPane();
         infoTxt = new javax.swing.JTextArea();
+        report = new javax.swing.JButton();
+        changeDuration = new javax.swing.JButton();
+        reportTitle = new javax.swing.JLabel();
+        reportTitleTxt = new javax.swing.JTextField();
+        repoRequired = new javax.swing.JLabel();
+        criticalPathBtn = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setCursor(new java.awt.Cursor(java.awt.Cursor.CROSSHAIR_CURSOR));
@@ -100,14 +112,14 @@ public class mainView extends javax.swing.JFrame {
         nodeDependenciesTxt.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         nodeDependenciesTxt.setToolTipText("Enter your dependicies seperated by a comma");
 
-        sortDurationBtn.setBackground(new java.awt.Color(0, 0, 0));
-        sortDurationBtn.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
-        sortDurationBtn.setForeground(new java.awt.Color(255, 255, 255));
-        sortDurationBtn.setText("List Individual Nodes");
-        sortDurationBtn.setToolTipText("This will sort your individual nodes by their duration");
-        sortDurationBtn.addActionListener(new java.awt.event.ActionListener() {
+        listIndividualNodes.setBackground(new java.awt.Color(0, 0, 0));
+        listIndividualNodes.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
+        listIndividualNodes.setForeground(new java.awt.Color(255, 255, 255));
+        listIndividualNodes.setText("List Individual Nodes");
+        listIndividualNodes.setToolTipText("This will sort your individual nodes by their duration");
+        listIndividualNodes.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                sortDurationBtnActionPerformed(evt);
+                listIndividualNodesActionPerformed(evt);
             }
         });
 
@@ -131,7 +143,7 @@ public class mainView extends javax.swing.JFrame {
             }
         });
 
-        helpBtn.setBackground(new java.awt.Color(102, 0, 0));
+        helpBtn.setBackground(new java.awt.Color(0, 51, 0));
         helpBtn.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         helpBtn.setForeground(new java.awt.Color(255, 255, 255));
         helpBtn.setText("Help");
@@ -141,7 +153,7 @@ public class mainView extends javax.swing.JFrame {
             }
         });
 
-        aboutBtn.setBackground(new java.awt.Color(102, 0, 0));
+        aboutBtn.setBackground(new java.awt.Color(0, 51, 0));
         aboutBtn.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         aboutBtn.setForeground(new java.awt.Color(255, 255, 255));
         aboutBtn.setText("About");
@@ -154,7 +166,7 @@ public class mainView extends javax.swing.JFrame {
         Reset.setBackground(new java.awt.Color(102, 0, 0));
         Reset.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         Reset.setForeground(new java.awt.Color(255, 255, 255));
-        Reset.setText("Reset");
+        Reset.setText("Reset All Nodes");
         Reset.setToolTipText("Delete all activities");
         Reset.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -171,6 +183,51 @@ public class mainView extends javax.swing.JFrame {
         infoTxt.setRows(5);
         jScrollPane2.setViewportView(infoTxt);
 
+        report.setBackground(new java.awt.Color(0, 0, 0));
+        report.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        report.setForeground(new java.awt.Color(255, 255, 255));
+        report.setText("Export to File");
+        report.setToolTipText("");
+        report.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                reportActionPerformed(evt);
+            }
+        });
+
+        changeDuration.setBackground(new java.awt.Color(0, 0, 0));
+        changeDuration.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        changeDuration.setForeground(new java.awt.Color(255, 255, 255));
+        changeDuration.setText("Change Duration");
+        changeDuration.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                changeDurationActionPerformed(evt);
+            }
+        });
+
+        reportTitle.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        reportTitle.setText("Report Title:");
+
+        reportTitleTxt.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                reportTitleTxtActionPerformed(evt);
+            }
+        });
+
+        repoRequired.setFont(new java.awt.Font("Courier New", 0, 13)); // NOI18N
+        repoRequired.setForeground(new java.awt.Color(255, 0, 0));
+        repoRequired.setText("*Required");
+        repoRequired.setToolTipText("");
+
+        criticalPathBtn.setBackground(new java.awt.Color(0, 0, 0));
+        criticalPathBtn.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        criticalPathBtn.setForeground(new java.awt.Color(255, 255, 255));
+        criticalPathBtn.setLabel("Critical Path");
+        criticalPathBtn.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                criticalPathBtnActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -178,86 +235,115 @@ public class mainView extends javax.swing.JFrame {
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(111, 111, 111)
-                        .addComponent(addNodeBtn))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(61, 61, 61)
-                        .addComponent(errorLbl, javax.swing.GroupLayout.PREFERRED_SIZE, 274, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(layout.createSequentialGroup()
                         .addContainerGap()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(nodeNamelbl)
-                            .addComponent(nodeDurationlbl)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(nodeNamelbl, javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(nodeDurationlbl, javax.swing.GroupLayout.Alignment.TRAILING)
                             .addComponent(nodeDependencieslbl))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(nodeNameTxt, javax.swing.GroupLayout.DEFAULT_SIZE, 263, Short.MAX_VALUE)
-                            .addComponent(nodeDurationTxt)
-                            .addComponent(nodeDependenciesTxt))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(durationErrorLbl)
-                            .addComponent(requiredLbl, javax.swing.GroupLayout.PREFERRED_SIZE, 89, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                            .addComponent(addNodeBtn)
+                            .addGroup(layout.createSequentialGroup()
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                    .addComponent(nodeNameTxt, javax.swing.GroupLayout.DEFAULT_SIZE, 263, Short.MAX_VALUE)
+                                    .addComponent(nodeDurationTxt)
+                                    .addComponent(nodeDependenciesTxt))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(durationErrorLbl)
+                                    .addComponent(requiredLbl, javax.swing.GroupLayout.PREFERRED_SIZE, 89, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                            .addComponent(changeDuration, javax.swing.GroupLayout.PREFERRED_SIZE, 143, javax.swing.GroupLayout.PREFERRED_SIZE)))
                     .addGroup(layout.createSequentialGroup()
                         .addGap(29, 29, 29)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 426, Short.MAX_VALUE)
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(aboutBtn)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(helpBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 81, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(Reset, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(18, 18, 18)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 426, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                .addComponent(aboutBtn, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addComponent(helpBtn, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))))
-                .addGap(31, 31, 31)
+                            .addGroup(layout.createSequentialGroup()
+                                .addGap(102, 102, 102)
+                                .addComponent(errorLbl, javax.swing.GroupLayout.PREFERRED_SIZE, 274, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(reportTitle)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(report, javax.swing.GroupLayout.PREFERRED_SIZE, 134, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addGroup(layout.createSequentialGroup()
+                                        .addComponent(reportTitleTxt, javax.swing.GroupLayout.PREFERRED_SIZE, 263, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addGap(35, 35, 35)
+                                        .addComponent(repoRequired)))))))
+                .addGap(78, 78, 78)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(sortDurationBtn, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(listIndividualNodes, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(listPathsBtn, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(Reset, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 228, Short.MAX_VALUE))
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 251, Short.MAX_VALUE)
+                    .addComponent(criticalPathBtn, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addGap(26, 26, 26))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(11, 11, 11)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(nodeNamelbl)
-                            .addComponent(nodeNameTxt, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(requiredLbl))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(nodeDurationlbl)
-                            .addComponent(nodeDurationTxt, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(durationErrorLbl))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(nodeDependencieslbl)
-                            .addComponent(nodeDependenciesTxt, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(18, 18, 18)
-                        .addComponent(addNodeBtn)
-                        .addGap(18, 18, 18)
-                        .addComponent(errorLbl)
-                        .addGap(34, 34, 34)
-                        .addComponent(helpBtn)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(aboutBtn)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 227, Short.MAX_VALUE))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(12, 12, 12)
-                        .addComponent(sortDurationBtn)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jScrollPane1)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(listPathsBtn)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(Reset)))
-                .addGap(30, 30, 30))
+                .addGap(11, 11, 11)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(nodeNamelbl)
+                    .addComponent(nodeNameTxt, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(requiredLbl))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(nodeDurationlbl)
+                    .addComponent(nodeDurationTxt, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(durationErrorLbl))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(nodeDependencieslbl)
+                    .addComponent(nodeDependenciesTxt, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(addNodeBtn)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(changeDuration)
+                .addGap(30, 30, 30)
+                .addComponent(errorLbl)
+                .addGap(30, 30, 30)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(reportTitle)
+                    .addComponent(reportTitleTxt, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(repoRequired))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(report)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 30, Short.MAX_VALUE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(aboutBtn)
+                    .addComponent(helpBtn))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 171, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(Reset)
+                .addGap(16, 16, 16))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addGap(12, 12, 12)
+                .addComponent(listIndividualNodes)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jScrollPane1)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(listPathsBtn)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(criticalPathBtn)
+                .addGap(32, 32, 32))
         );
+
+        reportTitle.getAccessibleContext().setAccessibleName("Report title:");
+        repoRequired.getAccessibleContext().setAccessibleName("repoRequired");
+        criticalPathBtn.getAccessibleContext().setAccessibleDescription("");
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-//=========================== Add Node Button =======================================
+//=========================== Add Node Button ========================================
     private void addNodeBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addNodeBtnActionPerformed
 
         boolean isNum = false;
@@ -318,9 +404,9 @@ public class mainView extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_addNodeBtnActionPerformed
 
-    private void listPathsBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_listPathsBtnActionPerformed
-
-//--------- Error Checking ----------------
+//================ called by listPtahsBtnActionPreformed & FileWrite Function ==========================
+    private String listPathsFunction(){
+        //--------- Error Checking ----------------
         Node[] end2 = list.findLastNodes();
         Node[] end1 = list.findLastNodes();
         Node[] start1 = list.findFirstNodes();
@@ -387,12 +473,17 @@ public class mainView extends javax.swing.JFrame {
                 for(int j = 0; j < pathObj.length; j++){
                     paths += pathObj[j];
                 }
-        
-                displayNodesField.setText(paths);
-            
                 list.resetDependicies();
+                return paths;
                 }
             }
+        return "";
+    }
+    
+    private void listPathsBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_listPathsBtnActionPerformed
+
+        String pathsGiven = listPathsFunction();
+        displayNodesField.setText(pathsGiven);
     }//GEN-LAST:event_listPathsBtnActionPerformed
 
     private void aboutBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_aboutBtnActionPerformed
@@ -451,10 +542,12 @@ public class mainView extends javax.swing.JFrame {
             nodeDependenciesTxt.setText("");
     }//GEN-LAST:event_ResetActionPerformed
 
-    private void sortDurationBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_sortDurationBtnActionPerformed
+    
+    private void listIndividualNodesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_listIndividualNodesActionPerformed
 
         //displays the contents of the linked list
         if(list.isEmpty()== false){
+            list.sortNodesABC();
             displayNodesField.setText(list.printString()); 
             errorLbl.setVisible(false);
         }else{
@@ -462,7 +555,102 @@ public class mainView extends javax.swing.JFrame {
             errorLbl.setText("There are no nodes in list");
         }
         
-    }//GEN-LAST:event_sortDurationBtnActionPerformed
+    }//GEN-LAST:event_listIndividualNodesActionPerformed
+
+    private void reportActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_reportActionPerformed
+        boolean titleEmpty = false;
+        if(list.isEmpty()==true)
+        {
+            errorLbl.setVisible(true);
+            errorLbl.setText("There are no nodes in list");
+        }
+        else
+        {
+            try
+            {
+                String title = reportTitleTxt.getText();
+                if(title.equals("")){
+                titleEmpty = true;
+                repoRequired.setVisible(true);
+                }else{
+            repoRequired.setVisible(false);
+                }
+                //date and time of creation
+                DateFormat date = new SimpleDateFormat("MM/dd/yyyy HH:mm:ss");
+                Date d = Calendar.getInstance().getTime();
+                String repoDate = date.format(d);
+                String createDate = repoDate;
+                //change the store address of report for your computer
+                FileWriter writer = new FileWriter("Macintosh HD\\Users\\liuxinyi\\Desktop\\Report.txt");
+                BufferedWriter bw = new BufferedWriter(writer);
+                //Write report title in text file
+                bw.write(title);
+                //Write date and time in text file
+                bw.write(createDate);
+                //List activities and paths
+                //bw.write(list.report());
+                bw.close();
+                reportTitleTxt.setText("");
+                reportTitleTxt.requestFocus();
+            }
+            catch(Exception e)
+            {
+               errorLbl.setVisible(true); //error label to check if int
+               errorLbl.setText("The input is not an integer!");         
+            }
+            //displayNodesField.setText(list.report());
+            errorLbl.setVisible(false);
+        }
+    }//GEN-LAST:event_reportActionPerformed
+
+    private void changeDurationActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_changeDurationActionPerformed
+        if(list.isEmpty() == true){
+            errorLbl.setVisible(true);
+            errorLbl.setText("There are no nodes in the list");
+        }else{
+            //String name = "A"; 
+             String name = nodeNameTxt.getText();
+        
+        //try-catch to check if input is an int
+            try{
+                //input is an integer - convert to int
+                int newDuration = Integer.parseInt(nodeDurationTxt.getText());
+                //changes node duration
+                errorLbl.setVisible(false); //error label to check if int
+                boolean tf = list.changeDuration(name,newDuration);
+                //----- Check if node duration was changed -------
+                if(tf == true){
+                    errorLbl.setVisible(false);
+                    displayNodesField.setText(list.printString()); //show updated node
+                }else{
+                    errorLbl.setVisible(true);
+                    errorLbl.setText("That node isn't in the list!");
+                }//end else
+            //----- Input is not integer ------
+            }catch(NumberFormatException e){
+                //input is not an integer
+                errorLbl.setVisible(true); //error label to check if int
+                errorLbl.setText("The input is not an integer!");
+            }
+        }//end else
+    }//GEN-LAST:event_changeDurationActionPerformed
+    
+    //can't delete this function...
+    private void reportTitleTxtActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_reportTitleTxtActionPerformed
+        // TODO add your handling code here:
+        
+    }//GEN-LAST:event_reportTitleTxtActionPerformed
+
+    private void criticalPathBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_criticalPathBtnActionPerformed
+        /*// TODO add your handling code here:
+        if(list.isEmpty()== false){
+            displayNodesField.setText(list.criticalPath()); 
+            errorLbl.setVisible(false);
+        }else{
+            errorLbl.setVisible(true);
+            errorLbl.setText("There are no nodes in list");
+        }*/
+    }//GEN-LAST:event_criticalPathBtnActionPerformed
 
     /**
      * @param args the command line arguments
@@ -503,6 +691,8 @@ public class mainView extends javax.swing.JFrame {
     private javax.swing.JButton Reset;
     private javax.swing.JButton aboutBtn;
     private javax.swing.JButton addNodeBtn;
+    private javax.swing.JButton changeDuration;
+    private javax.swing.JButton criticalPathBtn;
     private javax.swing.JTextArea displayNodesField;
     private javax.swing.JLabel durationErrorLbl;
     private javax.swing.JLabel errorLbl;
@@ -510,6 +700,7 @@ public class mainView extends javax.swing.JFrame {
     private javax.swing.JTextArea infoTxt;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
+    private javax.swing.JButton listIndividualNodes;
     private javax.swing.JButton listPathsBtn;
     private javax.swing.JTextField nodeDependenciesTxt;
     private javax.swing.JLabel nodeDependencieslbl;
@@ -517,7 +708,10 @@ public class mainView extends javax.swing.JFrame {
     private javax.swing.JLabel nodeDurationlbl;
     private javax.swing.JTextField nodeNameTxt;
     private javax.swing.JLabel nodeNamelbl;
+    private javax.swing.JLabel repoRequired;
+    private javax.swing.JButton report;
+    private javax.swing.JLabel reportTitle;
+    private javax.swing.JTextField reportTitleTxt;
     private javax.swing.JLabel requiredLbl;
-    private javax.swing.JButton sortDurationBtn;
     // End of variables declaration//GEN-END:variables
 }
