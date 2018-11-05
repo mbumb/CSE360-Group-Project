@@ -99,6 +99,29 @@ public class LinkedList{
         return pathObjArr;
     }
     
+     //---------------------- Find Critical Path(s) ----------------------------
+    public pathObject[] criticalPath(pathObject[] pathObjArr) {
+     
+        List<pathObject> criticalPath = new ArrayList<pathObject>();
+        criticalPath.add(pathObjArr[0]);
+        
+        pathObject obj1;
+        pathObject obj2;
+        
+        //criticalPath[0] = pathObjArr[0];
+        obj2 = criticalPath.get(0);
+        
+            for (int i = 1; i < pathObjArr.length; i++) {
+                obj1 = pathObjArr[i];
+                if(obj1.getDuration() == obj2.getDuration()) {
+                    criticalPath.add(obj1);
+                }
+            }
+        
+      return criticalPath.toArray(new pathObject[criticalPath.size()]);
+        
+    }
+    
     //------------------- Print Nework Paths -----------------------------------
 	//uses for loop in main to print all paths
     public pathObject getPathObj(){
