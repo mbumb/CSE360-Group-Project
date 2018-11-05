@@ -343,7 +343,7 @@ public class mainView extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-//=========================== Add Node Button =======================================
+//=========================== Add Node Button ========================================
     private void addNodeBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addNodeBtnActionPerformed
 
         boolean isNum = false;
