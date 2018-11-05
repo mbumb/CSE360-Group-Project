@@ -88,7 +88,7 @@ public class LinkedList{
             for(int j = 0; j < pathObjArr.length; j++){
                 obj1 = pathObjArr[j];
                 obj2 = pathObjArr[i];
-                if(obj1.getDuration() > obj2.getDuration()){
+                if(obj1.getDuration() < obj2.getDuration()){
                     //swap j and i indexes
                     temp = pathObjArr[j];
                     pathObjArr[j] = pathObjArr[i];
@@ -182,6 +182,31 @@ public class LinkedList{
         }
         
         return pathList.toArray(new pathObject[pathList.size()]);
+    }
+    
+    //-------------------- Sort nodes in ABC order -----------------------------
+    public void sortNodesABC(){
+        listNode node = head;
+        Node current = new Node();
+        Node nextNode = new Node();
+        Node temp = new Node();
+        while(node != null){
+            current = node.data;
+            listNode iterate = head;
+            while(iterate != null){
+                nextNode = iterate.data;
+                //swap
+                if(current.getName().compareTo(nextNode.getName()) < 0){
+                    temp = current;
+                    current = nextNode;
+                    nextNode = temp;
+                    node.data = current;
+                    iterate.data = nextNode;
+                }//end if
+                iterate = iterate.next;
+            }//end while
+            node = node.next;
+        }//end while
     }
     
     //--------------------- Reset Node Dependicies -----------------------------

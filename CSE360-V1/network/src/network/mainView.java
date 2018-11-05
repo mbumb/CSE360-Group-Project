@@ -58,7 +58,7 @@ public class mainView extends javax.swing.JFrame {
         jScrollPane1 = new javax.swing.JScrollPane();
         displayNodesField = new javax.swing.JTextArea();
         nodeDependenciesTxt = new javax.swing.JTextField();
-        sortDurationBtn = new javax.swing.JButton();
+        listIndividualNodes = new javax.swing.JButton();
         durationErrorLbl = new javax.swing.JLabel();
         errorLbl = new javax.swing.JLabel();
         listPathsBtn = new javax.swing.JButton();
@@ -112,14 +112,14 @@ public class mainView extends javax.swing.JFrame {
         nodeDependenciesTxt.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         nodeDependenciesTxt.setToolTipText("Enter your dependicies seperated by a comma");
 
-        sortDurationBtn.setBackground(new java.awt.Color(0, 0, 0));
-        sortDurationBtn.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
-        sortDurationBtn.setForeground(new java.awt.Color(255, 255, 255));
-        sortDurationBtn.setText("List Individual Nodes");
-        sortDurationBtn.setToolTipText("This will sort your individual nodes by their duration");
-        sortDurationBtn.addActionListener(new java.awt.event.ActionListener() {
+        listIndividualNodes.setBackground(new java.awt.Color(0, 0, 0));
+        listIndividualNodes.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
+        listIndividualNodes.setForeground(new java.awt.Color(255, 255, 255));
+        listIndividualNodes.setText("List Individual Nodes");
+        listIndividualNodes.setToolTipText("This will sort your individual nodes by their duration");
+        listIndividualNodes.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                sortDurationBtnActionPerformed(evt);
+                listIndividualNodesActionPerformed(evt);
             }
         });
 
@@ -279,7 +279,7 @@ public class mainView extends javax.swing.JFrame {
                                         .addComponent(repoRequired)))))))
                 .addGap(78, 78, 78)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(sortDurationBtn, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(listIndividualNodes, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(listPathsBtn, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 251, Short.MAX_VALUE)
                     .addComponent(criticalPathBtn, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
@@ -326,7 +326,7 @@ public class mainView extends javax.swing.JFrame {
                 .addGap(16, 16, 16))
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addGap(12, 12, 12)
-                .addComponent(sortDurationBtn)
+                .addComponent(listIndividualNodes)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jScrollPane1)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -404,9 +404,9 @@ public class mainView extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_addNodeBtnActionPerformed
 
-    private void listPathsBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_listPathsBtnActionPerformed
-
-//--------- Error Checking ----------------
+//================ called by listPtahsBtnActionPreformed & FileWrite Function ==========================
+    private String listPathsFunction(){
+        //--------- Error Checking ----------------
         Node[] end2 = list.findLastNodes();
         Node[] end1 = list.findLastNodes();
         Node[] start1 = list.findFirstNodes();
@@ -473,12 +473,17 @@ public class mainView extends javax.swing.JFrame {
                 for(int j = 0; j < pathObj.length; j++){
                     paths += pathObj[j];
                 }
-        
-                displayNodesField.setText(paths);
-            
                 list.resetDependicies();
+                return paths;
                 }
             }
+        return "";
+    }
+    
+    private void listPathsBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_listPathsBtnActionPerformed
+
+        String pathsGiven = listPathsFunction();
+        displayNodesField.setText(pathsGiven);
     }//GEN-LAST:event_listPathsBtnActionPerformed
 
     private void aboutBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_aboutBtnActionPerformed
@@ -537,10 +542,12 @@ public class mainView extends javax.swing.JFrame {
             nodeDependenciesTxt.setText("");
     }//GEN-LAST:event_ResetActionPerformed
 
-    private void sortDurationBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_sortDurationBtnActionPerformed
+    
+    private void listIndividualNodesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_listIndividualNodesActionPerformed
 
         //displays the contents of the linked list
         if(list.isEmpty()== false){
+            list.sortNodesABC();
             displayNodesField.setText(list.printString()); 
             errorLbl.setVisible(false);
         }else{
@@ -548,7 +555,7 @@ public class mainView extends javax.swing.JFrame {
             errorLbl.setText("There are no nodes in list");
         }
         
-    }//GEN-LAST:event_sortDurationBtnActionPerformed
+    }//GEN-LAST:event_listIndividualNodesActionPerformed
 
     private void reportActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_reportActionPerformed
         boolean titleEmpty = false;
@@ -693,6 +700,7 @@ public class mainView extends javax.swing.JFrame {
     private javax.swing.JTextArea infoTxt;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
+    private javax.swing.JButton listIndividualNodes;
     private javax.swing.JButton listPathsBtn;
     private javax.swing.JTextField nodeDependenciesTxt;
     private javax.swing.JLabel nodeDependencieslbl;
@@ -705,6 +713,5 @@ public class mainView extends javax.swing.JFrame {
     private javax.swing.JLabel reportTitle;
     private javax.swing.JTextField reportTitleTxt;
     private javax.swing.JLabel requiredLbl;
-    private javax.swing.JButton sortDurationBtn;
     // End of variables declaration//GEN-END:variables
 }
