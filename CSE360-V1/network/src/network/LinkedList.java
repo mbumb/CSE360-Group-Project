@@ -99,7 +99,7 @@ public class LinkedList{
         return pathObjArr;
     }
     
-     //---------------------- Find Critical Path(s) ----------------------------
+    //---------------------- Find Critical Path(s) ----------------------------
     public pathObject[] criticalPath(pathObject[] pathObjArr) {
      
         List<pathObject> criticalPath = new ArrayList<pathObject>();
