@@ -69,10 +69,11 @@ public class Node{
     }
     
     public String toString(){
+        String universalNewLineChar = System.getProperty("line.separator");
         return "\n" +
-               "Name: " + getName() + "\n" +
-               "Duration: " + getDuration() + "\n" +
-               "Dependicies: {" +  getDependicies() + "\n";
+               "Name: " + getName() + universalNewLineChar +
+               "Duration: " + getDuration() + universalNewLineChar +
+               "Dependicies: {" +  getDependicies() + universalNewLineChar;
     }
     
 }//end Node class

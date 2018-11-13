@@ -385,4 +385,16 @@ public class LinkedList{
     	return result;
     }
     
+    //------------ Prints out linkedlist contents plus a newline character, for the report ---------
+    public String printActivitiesStringForReport() {
+        String universalNewLineChar = System.getProperty("line.separator");
+    	String result = "";
+    	listNode current = head;
+    	while(current != null) {
+    		result += String.valueOf(current.data);
+    		current = current.next;
+                result += universalNewLineChar;
+    	}
+    	return result;
+    }
 }//end linkedlist class
