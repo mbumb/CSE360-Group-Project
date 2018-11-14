@@ -4,23 +4,28 @@
  * and open the template in the editor.
  */
 package network;
+
 import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.*;
+
 /**
  *
  * @author mmwoodfo
  */
 public class mainView extends javax.swing.JFrame {
+
     public LinkedList list = new LinkedList();
+    public String universalNewLineChar = System.getProperty("line.separator");
+
     /**
      * Creates new form mainView
      */
     public mainView() {
         initComponents();
-        
+
         //hides dependencies options if linked list is empty
         /*if(list.isEmpty() == true){
             //remove nodeDependenciesTxt and nodeDependencieslbl
@@ -31,13 +36,12 @@ public class mainView extends javax.swing.JFrame {
             nodeDependenciesTxt.setVisible(true);
             nodeDependencieslbl.setVisible(true);
         }*/
-        
         durationErrorLbl.setVisible(false); //hides error label on start up
         errorLbl.setVisible(false); //hides error label on start up
         requiredLbl.setVisible(false);
         infoTxt.setVisible(false);
         repoRequired.setVisible(false);
-        
+
     }
 
     /**
@@ -352,131 +356,209 @@ public class mainView extends javax.swing.JFrame {
         Boolean nameEmpty = false;
         //sets name of node
         String nodeNameStr = nodeNameTxt.getText();
-        if(nodeNameStr.equals("")){
+        if (nodeNameStr.equals("")) {
             nameEmpty = true;
             requiredLbl.setVisible(true);
-        }else{
-           newNode.setName(nodeNameStr); 
-           requiredLbl.setVisible(false);
+        } else {
+            newNode.setName(nodeNameStr);
+            requiredLbl.setVisible(false);
         }
-        
+
         //try-catch to check if input is an int
-        try{
+        try {
             //input is an integer - convert to int
             int nodeDurationInt = Integer.parseInt(nodeDurationTxt.getText());
             //sets duration of node
-            newNode.setDuration(nodeDurationInt); 
+            newNode.setDuration(nodeDurationInt);
             durationErrorLbl.setVisible(false);
             isNum = true;
-        }catch(NumberFormatException e){
-           //input is not an integer
-           durationErrorLbl.setVisible(true);
-           isNum = false;
+        } catch (NumberFormatException e) {
+            //input is not an integer
+            durationErrorLbl.setVisible(true);
+            isNum = false;
         }
-        
-        if(isNum == true && nameEmpty == false){
+
+        if (isNum == true && nameEmpty == false) {
             //convert CSV to array
             String nodeDependiciesStr = nodeDependenciesTxt.getText();
-            String[] nodeDependiciesArr = nodeDependiciesStr.split("\\s*,\\s*"); 
+            String[] nodeDependiciesArr = nodeDependiciesStr.split("\\s*,\\s*");
             //sets node dependicies array
             newNode.setDependicies(nodeDependiciesArr);
             newNode.setDependiciesCpy2(nodeDependiciesArr);
             newNode.setDependiciesCpy2(nodeDependiciesArr);
-            
+
             //add node to end of linked list
             list.addLast(newNode);
-        
+
             //displays the contents of the linked list
-            displayNodesField.setText(list.printString()); 
-        
+            displayNodesField.setText(list.printString());
+
             //shows dependencies options after first node is added
             //nodeDependenciesTxt.setVisible(true);
             //nodeDependencieslbl.setVisible(true);
-        
             //resets textFields
             nodeNameTxt.setText("");
             nodeDurationTxt.setText("");
             nodeDependenciesTxt.setText("");
         }//end if isNum == true
-        else{ //error, could not add node
+        else { //error, could not add node
             errorLbl.setText("Error: Could not Add Node");
             errorLbl.setVisible(true);
         }
     }//GEN-LAST:event_addNodeBtnActionPerformed
 
-//================ called by listPtahsBtnActionPreformed & FileWrite Function ==========================
-    private String listPathsFunction(){
+//================ called by listPtahsBtnActionPreformed ==========================
+    private String listPathsFunction() {
         //--------- Error Checking ----------------
         Node[] end2 = list.findLastNodes();
         Node[] end1 = list.findLastNodes();
         Node[] start1 = list.findFirstNodes();
-        if(list.isEmpty() == true){
+        if (list.isEmpty() == true) {
             errorLbl.setVisible(true);
             errorLbl.setText("There are no nodes in the list");
-            displayNodesField.setText(""); 
+            displayNodesField.setText("");
             list.resetList();
-        }else if(start1[0] == null){
+        } else if (start1[0] == null) {
             errorLbl.setVisible(true);
             errorLbl.setText("There are no starting nodes");
-            displayNodesField.setText(""); 
+            displayNodesField.setText("");
             list.resetList();
-        }else if(end1[0] == null){
+        } else if (end1[0] == null) {
             errorLbl.setVisible(true);
             errorLbl.setText("There are no ending nodes");
-            displayNodesField.setText(""); 
+            displayNodesField.setText("");
             list.resetList();
-        }else if(end2[1] != null){
+        } else if (end2[1] != null) {
             errorLbl.setVisible(true);
             errorLbl.setText("There is more than one ending node");
-            displayNodesField.setText(""); 
+            displayNodesField.setText("");
             list.resetList();
-            
-        //---------- Error checking passed ------------------
-        }else{
+
+            //---------- Error checking passed ------------------
+        } else {
             errorLbl.setVisible(false);
             boolean error = false;
             int numOfPaths = list.numberOfPaths();
-            
+
             pathObject[] pathObj = new pathObject[numOfPaths];
-        //------------- populating path object array ---------------
-            for(int i = 0; i<numOfPaths; i++){
+            //------------- populating path object array ---------------
+            for (int i = 0; i < numOfPaths; i++) {
                 pathObj[i] = list.getPathObj();
 
                 //---- if there is an unconnected node -----
-                if(pathObj[i] == null){
+                if (pathObj[i] == null) {
                     errorLbl.setVisible(true);
                     errorLbl.setText("There are unconnected nodes");
-                    displayNodesField.setText(""); 
+                    displayNodesField.setText("");
                     list.resetList();
                     error = true;
                     break;
                 }
                 //------ if there is a cycle ------
-                if(list.cycleCheck(pathObj[i]) == true) {
+                if (list.cycleCheck(pathObj[i]) == true) {
                     errorLbl.setVisible(true);
                     errorLbl.setText("There is a cycle");
-                    displayNodesField.setText(""); 
+                    displayNodesField.setText("");
                     error = true;
                     list.resetList();
                     break;
                 }
             }
-            
-            if(error == false){
+
+            if (error == false) {
                 pathObj = list.removeDuplicates(pathObj);
-            
+
                 //sort by duration
                 pathObj = list.sortPaths(pathObj);
-        
+
                 String paths = "";
-        
-                for(int j = 0; j < pathObj.length; j++){
+
+                for (int j = 0; j < pathObj.length; j++) {
                     paths += pathObj[j];
                 }
                 list.resetDependicies();
                 return paths;
+            }
+        }
+        return "";
+    }
+
+    //================ version of listPathsFunction called by FileWrite Function ==========================
+    //======= only difference between normal one and this is that this one inserts an extra newline character between each path listing =======
+    //======= In practice, this is really bad, but for our purposes, we can afford the extra code space (this is last deliverable) =======
+    private String listReportPathsFunction() {
+        //--------- Error Checking ----------------
+        Node[] end2 = list.findLastNodes();
+        Node[] end1 = list.findLastNodes();
+        Node[] start1 = list.findFirstNodes();
+        if (list.isEmpty() == true) {
+            errorLbl.setVisible(true);
+            errorLbl.setText("There are no nodes in the list");
+            displayNodesField.setText("");
+            list.resetList();
+        } else if (start1[0] == null) {
+            errorLbl.setVisible(true);
+            errorLbl.setText("There are no starting nodes");
+            displayNodesField.setText("");
+            list.resetList();
+        } else if (end1[0] == null) {
+            errorLbl.setVisible(true);
+            errorLbl.setText("There are no ending nodes");
+            displayNodesField.setText("");
+            list.resetList();
+        } else if (end2[1] != null) {
+            errorLbl.setVisible(true);
+            errorLbl.setText("There is more than one ending node");
+            displayNodesField.setText("");
+            list.resetList();
+
+            //---------- Error checking passed ------------------
+        } else {
+            errorLbl.setVisible(false);
+            boolean error = false;
+            int numOfPaths = list.numberOfPaths();
+
+            pathObject[] pathObj = new pathObject[numOfPaths];
+            //------------- populating path object array ---------------
+            for (int i = 0; i < numOfPaths; i++) {
+                pathObj[i] = list.getPathObj();
+
+                //---- if there is an unconnected node -----
+                if (pathObj[i] == null) {
+                    errorLbl.setVisible(true);
+                    errorLbl.setText("There are unconnected nodes");
+                    displayNodesField.setText("");
+                    list.resetList();
+                    error = true;
+                    break;
+                }
+                //------ if there is a cycle ------
+                if (list.cycleCheck(pathObj[i]) == true) {
+                    errorLbl.setVisible(true);
+                    errorLbl.setText("There is a cycle");
+                    displayNodesField.setText("");
+                    error = true;
+                    list.resetList();
+                    break;
                 }
             }
+
+            if (error == false) {
+                pathObj = list.removeDuplicates(pathObj);
+
+                //sort by duration
+                pathObj = list.sortPaths(pathObj);
+
+                String paths = "";
+
+                for (int j = 0; j < pathObj.length; j++) {
+                    paths += pathObj[j];
+                    paths += universalNewLineChar;
+                }
+                list.resetDependicies();
+                return paths;
+            }
+        }
         return "";
     }
     
@@ -496,8 +578,8 @@ public class mainView extends javax.swing.JFrame {
                 + "Fall of 2018:\n"
                 + "Meg Woodford\n"
                 + "Matthew Bumb\n"
-                + "Xinyi\n"
-                + "and Melissa\n"
+                + "Xinyi Lui\n"
+                + "and Melissa Smeester\n"
                 + "\n"
                 + "To allow users to create a\n"
                 + "network diagram, and find all\n"
@@ -520,6 +602,7 @@ public class mainView extends javax.swing.JFrame {
                 + "-Press the 'List Paths' button to see all paths through the network\n"
                 + "diagram.\n"
                 + "-Press 'Reset' to clear the list of all nodes.\n"
+                + "-Press Export To File once you've entered a report file name in the box\n"
                 + "\n"
                 + "If you are having trouble adding a node, be sure\n"
                 + "to make sure all text fields are filled in. If you are experiencing\n"
@@ -531,49 +614,46 @@ public class mainView extends javax.swing.JFrame {
         // TODO add your handling code here:
         errorLbl.setVisible(true);
         errorLbl.setText("Program Reset - All Activities Removed");
-        displayNodesField.setText(""); 
+        displayNodesField.setText("");
         list.resetList();
         durationErrorLbl.setVisible(false);
         requiredLbl.setVisible(false);
-        
+
         //resets textFields
-            nodeNameTxt.setText("");
-            nodeDurationTxt.setText("");
-            nodeDependenciesTxt.setText("");
+        nodeNameTxt.setText("");
+        nodeDurationTxt.setText("");
+        nodeDependenciesTxt.setText("");
     }//GEN-LAST:event_ResetActionPerformed
 
-    
     private void listIndividualNodesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_listIndividualNodesActionPerformed
 
         //displays the contents of the linked list
-        if(list.isEmpty()== false){
+        if (list.isEmpty() == false) {
             list.sortNodesABC();
-            displayNodesField.setText(list.printString()); 
+            displayNodesField.setText(list.printString());
             errorLbl.setVisible(false);
-        }else{
+        } else {
             errorLbl.setVisible(true);
             errorLbl.setText("There are no nodes in list");
         }
-        
+
     }//GEN-LAST:event_listIndividualNodesActionPerformed
 
     private void reportActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_reportActionPerformed
         boolean titleEmpty = false;
-        if(list.isEmpty()==true)
-        {
+        
+        
+        if (list.isEmpty() == true) {
             errorLbl.setVisible(true);
             errorLbl.setText("There are no nodes in list");
-        }
-        else
-        {
-            try
-            {
+        } else {
+            try {
                 String title = reportTitleTxt.getText();
-                if(title.equals("")){
-                titleEmpty = true;
-                repoRequired.setVisible(true);
-                }else{
-            repoRequired.setVisible(false);
+                if (title.equals("")) {
+                    titleEmpty = true;
+                    repoRequired.setVisible(true);
+                } else {
+                    repoRequired.setVisible(false);
                 }
                 //date and time of creation
                 DateFormat date = new SimpleDateFormat("MM/dd/yyyy HH:mm:ss");
@@ -581,22 +661,39 @@ public class mainView extends javax.swing.JFrame {
                 String repoDate = date.format(d);
                 String createDate = repoDate;
                 //change the store address of report for your computer
-                FileWriter writer = new FileWriter("Macintosh HD\\Users\\liuxinyi\\Desktop\\Report.txt");
+                FileWriter writer = new FileWriter(title + ".txt");
                 BufferedWriter bw = new BufferedWriter(writer);
                 //Write report title in text file
+                bw.write("-TITLE:-");
+                bw.write(universalNewLineChar);
                 bw.write(title);
+                bw.write(universalNewLineChar);
+                bw.write(universalNewLineChar);
                 //Write date and time in text file
+                bw.write("-DATE:-");
+                bw.write(universalNewLineChar);
                 bw.write(createDate);
-                //List activities and paths
-                //bw.write(list.report());
+                bw.write(universalNewLineChar);
+                bw.write(universalNewLineChar);
+                //Sort nodes in ABC order, then List their activities and duration
+                bw.write("-ACTIVITIES:-");
+                bw.write(universalNewLineChar);
+                list.sortNodesABC();
+                bw.write(list.printActivitiesStringForReport());
+                bw.write(universalNewLineChar);
+                bw.write(universalNewLineChar);
+                //List paths
+                bw.write("-PATHS:-");
+                bw.write(universalNewLineChar);
+                bw.write(listReportPathsFunction());  //list path function call to print
+                bw.write(universalNewLineChar);
+                
                 bw.close();
                 reportTitleTxt.setText("");
                 reportTitleTxt.requestFocus();
-            }
-            catch(Exception e)
-            {
-               errorLbl.setVisible(true); //error label to check if int
-               errorLbl.setText("The input is not an integer!");         
+            } catch (Exception e) {
+                errorLbl.setVisible(true); //error label to check if int
+                errorLbl.setText("The input is not an integer!");
             }
             //displayNodesField.setText(list.report());
             errorLbl.setVisible(false);
@@ -604,121 +701,121 @@ public class mainView extends javax.swing.JFrame {
     }//GEN-LAST:event_reportActionPerformed
 
     private void changeDurationActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_changeDurationActionPerformed
-        if(list.isEmpty() == true){
+        if (list.isEmpty() == true) {
             errorLbl.setVisible(true);
             errorLbl.setText("There are no nodes in the list");
-        }else{
+        } else {
             //String name = "A"; 
-             String name = nodeNameTxt.getText();
-        
-        //try-catch to check if input is an int
-            try{
+            String name = nodeNameTxt.getText();
+
+            //try-catch to check if input is an int
+            try {
                 //input is an integer - convert to int
                 int newDuration = Integer.parseInt(nodeDurationTxt.getText());
                 //changes node duration
                 errorLbl.setVisible(false); //error label to check if int
-                boolean tf = list.changeDuration(name,newDuration);
+                boolean tf = list.changeDuration(name, newDuration);
                 //----- Check if node duration was changed -------
-                if(tf == true){
+                if (tf == true) {
                     errorLbl.setVisible(false);
                     displayNodesField.setText(list.printString()); //show updated node
-                }else{
+                } else {
                     errorLbl.setVisible(true);
                     errorLbl.setText("That node isn't in the list!");
                 }//end else
-            //----- Input is not integer ------
-            }catch(NumberFormatException e){
+                //----- Input is not integer ------
+            } catch (NumberFormatException e) {
                 //input is not an integer
                 errorLbl.setVisible(true); //error label to check if int
                 errorLbl.setText("The input is not an integer!");
             }
         }//end else
     }//GEN-LAST:event_changeDurationActionPerformed
-    
+
     //can't delete this function...
     private void reportTitleTxtActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_reportTitleTxtActionPerformed
         // TODO add your handling code here:
-        
+
     }//GEN-LAST:event_reportTitleTxtActionPerformed
 
-    private String criticalPathFunction() {                                                
+    private String criticalPathFunction() {
         //--------- Error Checking ----------------
         Node[] end2 = list.findLastNodes();
         Node[] end1 = list.findLastNodes();
         Node[] start1 = list.findFirstNodes();
-        if(list.isEmpty() == true){
+        if (list.isEmpty() == true) {
             errorLbl.setVisible(true);
             errorLbl.setText("There are no nodes in the list");
-            displayNodesField.setText(""); 
+            displayNodesField.setText("");
             list.resetList();
-        }else if(start1[0] == null){
+        } else if (start1[0] == null) {
             errorLbl.setVisible(true);
             errorLbl.setText("There are no starting nodes");
-            displayNodesField.setText(""); 
+            displayNodesField.setText("");
             list.resetList();
-        }else if(end1[0] == null){
+        } else if (end1[0] == null) {
             errorLbl.setVisible(true);
             errorLbl.setText("There are no ending nodes");
-            displayNodesField.setText(""); 
+            displayNodesField.setText("");
             list.resetList();
-        }else if(end2[1] != null){
+        } else if (end2[1] != null) {
             errorLbl.setVisible(true);
             errorLbl.setText("There is more than one ending node");
-            displayNodesField.setText(""); 
+            displayNodesField.setText("");
             list.resetList();
-            
-        //---------- Error checking passed ------------------
-        }else{
+
+            //---------- Error checking passed ------------------
+        } else {
             errorLbl.setVisible(false);
             boolean error = false;
             int numOfPaths = list.numberOfPaths();
-            
+
             pathObject[] pathObj = new pathObject[numOfPaths];
-        //------------- populating path object array ---------------
-            for(int i = 0; i<numOfPaths; i++){
+            //------------- populating path object array ---------------
+            for (int i = 0; i < numOfPaths; i++) {
                 pathObj[i] = list.getPathObj();
 
                 //---- if there is an unconnected node -----
-                if(pathObj[i] == null){
+                if (pathObj[i] == null) {
                     errorLbl.setVisible(true);
                     errorLbl.setText("There are unconnected nodes");
-                    displayNodesField.setText(""); 
+                    displayNodesField.setText("");
                     list.resetList();
                     error = true;
                     break;
                 }
                 //------ if there is a cycle ------
-                if(list.cycleCheck(pathObj[i]) == true) {
+                if (list.cycleCheck(pathObj[i]) == true) {
                     errorLbl.setVisible(true);
                     errorLbl.setText("There is a cycle");
-                    displayNodesField.setText(""); 
+                    displayNodesField.setText("");
                     error = true;
                     list.resetList();
                     break;
                 }
             }
-            
-            if(error == false){
+
+            if (error == false) {
                 pathObj = list.removeDuplicates(pathObj);
-            
+
                 //sort by duration
                 pathObj = list.sortPaths(pathObj);
-                
+
                 pathObj = list.criticalPath(pathObj);
-                
+
                 String paths = "";
-        
-                for(int j = 0; j < pathObj.length; j++){
+
+                for (int j = 0; j < pathObj.length; j++) {
                     paths += pathObj[j];
                 }
                 list.resetDependicies();
                 return paths;
-                
-            }                                     
+
+            }
         }
         return "";
     }
-    
+
     private void criticalPathBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_criticalPathBtnActionPerformed
         String pathsGiven = criticalPathFunction();
         displayNodesField.setText(pathsGiven);
